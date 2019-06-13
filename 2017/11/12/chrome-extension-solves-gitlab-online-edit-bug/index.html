@@ -89,18 +89,23 @@
     }
   };
 </script>
-  <meta name="description" content="技术成长路">
-<meta name="keywords" content="w3cmark, 前端, 前端开发, css, javascript,">
-<meta property="og:type" content="website">
-<meta property="og:title" content="w3cmark - 技术博客">
-<meta property="og:url" content="http://w3cmark.com/index.html">
+  <meta name="description" content="先上一张gif效果图：  我们团队内部搭建了gitlab作为代码托管，目前的版本是GitLab Community Edition 8.17.5 9a564a8，在升级到这个版本时，发现在chrome下，在线编辑无法正常输入中文了，出现如上动图的错乱效果，而在firefox是正常的。 一开始怀疑是chrome更新版本后的问题，但是github的在线编辑是正常的，后来通过chrome开发者工具deb">
+<meta name="keywords" content="工具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用chrome extension解决gitlab在线编辑时输入中文出现错乱的问题">
+<meta property="og:url" content="http://w3cmark.com/2017/11/12/chrome-extension-solves-gitlab-online-edit-bug/index.html">
 <meta property="og:site_name" content="w3cmark - 技术博客">
-<meta property="og:description" content="技术成长路">
+<meta property="og:description" content="先上一张gif效果图：  我们团队内部搭建了gitlab作为代码托管，目前的版本是GitLab Community Edition 8.17.5 9a564a8，在升级到这个版本时，发现在chrome下，在线编辑无法正常输入中文了，出现如上动图的错乱效果，而在firefox是正常的。 一开始怀疑是chrome更新版本后的问题，但是github的在线编辑是正常的，后来通过chrome开发者工具deb">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://github.com/w3cmark/blog/blob/master/assets/gitlab-chrome-input-bug.gif?raw=true">
+<meta property="og:updated_time" content="2019-06-13T12:29:12.950Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="w3cmark - 技术博客">
-<meta name="twitter:description" content="技术成长路">
+<meta name="twitter:title" content="使用chrome extension解决gitlab在线编辑时输入中文出现错乱的问题">
+<meta name="twitter:description" content="先上一张gif效果图：  我们团队内部搭建了gitlab作为代码托管，目前的版本是GitLab Community Edition 8.17.5 9a564a8，在升级到这个版本时，发现在chrome下，在线编辑无法正常输入中文了，出现如上动图的错乱效果，而在firefox是正常的。 一开始怀疑是chrome更新版本后的问题，但是github的在线编辑是正常的，后来通过chrome开发者工具deb">
+<meta name="twitter:image" content="https://github.com/w3cmark/blog/blob/master/assets/gitlab-chrome-input-bug.gif?raw=true">
 
+
+  
 
 
   <link rel="alternate" href="/atom.xml" title="w3cmark - 技术博客" type="application/atom+xml">
@@ -109,7 +114,7 @@
 
   
   
-  <link rel="canonical" href="http://w3cmark.com/">
+  <link rel="canonical" href="http://w3cmark.com/2017/11/12/chrome-extension-solves-gitlab-online-edit-bug/">
 
 
 
@@ -119,7 +124,7 @@
   };
 </script>
 
-  <title>w3cmark - 技术博客</title>
+  <title>使用chrome extension解决gitlab在线编辑时输入中文出现错乱的问题 | w3cmark - 技术博客</title>
   
 
 
@@ -166,7 +171,7 @@
     
   
 
-  <div class="container sidebar-position-left page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -203,7 +208,7 @@
         
         
           
-          <li class="menu-item menu-item-home menu-item-active">
+          <li class="menu-item menu-item-home">
 
     
     
@@ -332,9 +337,9 @@
           
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -366,10 +371,8 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/11/12/chrome-extension-solves-gitlab-online-edit-bug/" class="post-title-link" itemprop="url">使用chrome extension解决gitlab在线编辑时输入中文出现错乱的问题</a>
+          <h2 class="post-title" itemprop="name headline">使用chrome extension解决gitlab在线编辑时输入中文出现错乱的问题
+
               
             
           </h2>
@@ -445,9 +448,7 @@
       
 
       
-        
-          
-            <p>先上一张gif效果图：</p>
+        <p>先上一张gif效果图：</p>
 <p><img src="https://github.com/w3cmark/blog/blob/master/assets/gitlab-chrome-input-bug.gif?raw=true" alt="gitlab-chrome-input-bug"></p>
 <p>我们团队内部搭建了gitlab作为代码托管，目前的版本是<code>GitLab Community Edition 8.17.5 9a564a8</code>，在升级到这个版本时，发现在chrome下，在线编辑无法正常输入中文了，出现如上动图的错乱效果，而在firefox是正常的。</p>
 <p>一开始怀疑是chrome更新版本后的问题，但是github的在线编辑是正常的，后来通过chrome开发者工具debug，发现是gitlab使用的在线编辑器有问题。无论gitlab还是github，这种在线编辑代码都是借助于一些web编辑器实现的，比如<a href="https://ace.c9.io/" target="_blank" rel="noopener">aceeditor</a>，而这里gitlab用的正是<code>aceeditor</code>，因此第一时间跑去aceeditor官网，嗯，人家的是正常的。所以gitlab出现这种问题的原因就是aceeditor编辑器的版本在新版chrome下的bug。</p>
@@ -475,8 +476,6 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fix_btn = <span class="string">'&lt;a href="#fixgitlabedit" class="fix-btn" id="js-fix-btn"&gt;中文编辑&lt;/a&gt;'</span>;</span><br><span class="line">$(<span class="string">'body'</span>).append(fix_btn);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(location.hash == <span class="string">'#fixgitlabedit'</span>)&#123;</span><br><span class="line">     <span class="comment">//传入当前地址和文件类型</span></span><br><span class="line">    fixeditor(curhref, file_mode);</span><br><span class="line">    $(<span class="string">'#js-fix-btn'</span>).hide();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fixeditor</span>(<span class="params">curhref, file_mode</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//隐藏旧的编辑器</span></span><br><span class="line">    $(<span class="string">'#editor'</span>).hide();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> fix_div = <span class="string">'&lt;pre id="js-fix-editor" class="fix-editor"&gt;&lt;pre&gt;'</span>,</span><br><span class="line">        new_editor,</span><br><span class="line">        $old_editor_par = $(<span class="string">'#editor'</span>).parent();</span><br><span class="line">    <span class="comment">// 插入新的编辑器</span></span><br><span class="line">    $old_editor_par.append(fix_div);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> $form_actions = $(<span class="string">'form .form-actions'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//隐藏旧的保存按钮</span></span><br><span class="line">    $form_actions.find(<span class="string">'.btn.commit-btn.js-commit-button.btn-create'</span>).hide();</span><br><span class="line">    <span class="keyword">var</span> new_submit_btn = <span class="string">'&lt;button name="button" class="btn btn-create new-submit-btn"&gt;Commit Changes&lt;/button&gt;'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//插入新的保存按钮</span></span><br><span class="line">    $form_actions.prepend(new_submit_btn);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//保存操作</span></span><br><span class="line">    $form_actions.on(<span class="string">'click'</span>, <span class="string">'.new-submit-btn'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>($(<span class="keyword">this</span>).hasClass(<span class="string">'disabled'</span>))&#123;<span class="keyword">return</span>;&#125;</span><br><span class="line">        e.preventDefault();</span><br><span class="line">        $(<span class="keyword">this</span>).addClass(<span class="string">'disabled'</span>);</span><br><span class="line">        <span class="comment">//获取编辑器的内容，aceeditor提供的方法</span></span><br><span class="line">        <span class="keyword">var</span> new_val = new_editor.getValue();</span><br><span class="line">        $(<span class="string">'#file-content'</span>).val(new_val);</span><br><span class="line">        $(<span class="string">"form.form-horizontal.js-quick-submit.js-requires-input.js-edit-blob-form"</span>)[<span class="number">0</span>].submit();</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据当前地址获取文件内容</span></span><br><span class="line">    getHttpRequest(curhref, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> r_editor_text = <span class="regexp">/\&lt;pre class="js-edit-mode-pane" id="editor"\&gt;([\s\S]*)\&lt;\/pre\&gt;/igm</span>;</span><br><span class="line">        data.match(r_editor_text);</span><br><span class="line">        <span class="keyword">var</span> editor_text = <span class="built_in">RegExp</span>.$<span class="number">1</span>;</span><br><span class="line">        $old_editor_par.find(<span class="string">'#js-fix-editor'</span>).html(editor_text);</span><br><span class="line">        <span class="comment">//获取编辑器的内容，aceeditor提供的方法</span></span><br><span class="line">        new_editor = ace.edit(<span class="string">"js-fix-editor"</span>);</span><br><span class="line">        new_editor.session.setMode(<span class="string">"ace/mode/"</span>+file_mode);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getHttpRequest</span>(<span class="params">href, callback</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    xhr.open(<span class="string">"GET"</span>, href, <span class="literal">true</span>);</span><br><span class="line">    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (xhr.readyState == <span class="number">4</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> data = xhr.responseText;</span><br><span class="line">        <span class="keyword">typeof</span> callback == <span class="string">'function'</span> &amp;&amp; callback(data);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    xhr.send();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>到这里，就可以正常输入中文并保存了，对于没有接触chrome插件开发的人来说可能比较麻烦，so，就当新想法的折腾呗~</p>
-          
-        
       
     </div>
 
@@ -497,14 +496,23 @@
 
     <footer class="post-footer">
       
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/工具/" rel="tag"># 工具</a>
+          
+        </div>
+      
+
+      
+      
+      
 
       
 
       
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -514,14 +522,15 @@
   </article>
 
 
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -541,8 +550,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -636,6 +654,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#下载最新版的aceeditor编辑器"><span class="nav-number">1.</span> <span class="nav-text">下载最新版的aceeditor编辑器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#加载编辑器文件"><span class="nav-number">2.</span> <span class="nav-text">加载编辑器文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#替换操作"><span class="nav-number">3.</span> <span class="nav-text">替换操作</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -751,6 +786,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
 
   
 
@@ -766,6 +805,8 @@
 
   
 
+
+  
 
 
   
