@@ -2,16 +2,79 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://w3cmark.com/2018/01/02/webp-image-degradation-plan/</loc>
+    
+    <lastmod>2019-06-14T11:58:23.544Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w3cmark.com/2018/02/15/vue-bugs/</loc>
+    
+    <lastmod>2019-06-14T11:54:47.775Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w3cmark.com/2018/01/20/python-getting-started/</loc>
+    
+    <lastmod>2019-06-14T11:54:37.319Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w3cmark.com/2018/01/15/common-toolset-memo/</loc>
+    
+    <lastmod>2019-06-14T11:53:39.469Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w3cmark.com/2017/12/24/small-program-bugs/</loc>
+    
+    <lastmod>2019-06-14T11:51:49.552Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w3cmark.com/2018/02/05/frontend-bugs/</loc>
+    
+    <lastmod>2019-06-14T11:50:16.937Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w3cmark.com/2018/01/25/unfamiliar-html-tags/</loc>
+    
+    <lastmod>2019-06-14T11:46:48.038Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w3cmark.com/2017/12/29/front-end-open-source-project-directory-structure/</loc>
+    
+    <lastmod>2019-06-14T11:33:32.877Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w3cmark.com/2017/12/26/laraval-nova/</loc>
+    
+    <lastmod>2019-06-14T11:33:26.965Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://w3cmark.com/categories/index.html</loc>
     
-    <lastmod>2019-06-14T10:27:15.424Z</lastmod>
+    <lastmod>2019-06-14T11:02:05.470Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://w3cmark.com/tags/index.html</loc>
     
-    <lastmod>2019-06-14T10:21:42.856Z</lastmod>
+    <lastmod>2019-06-14T11:01:52.903Z</lastmod>
     
   </url>
   

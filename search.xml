@@ -1,6 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Vue开发遇到的问题积累]]></title>
+    <url>%2F2018%2F02%2F15%2Fvue-bugs%2F</url>
+    <content type="text"><![CDATA[以下问题出现的场景都是基于vue2.x，如果是vue 1.x，可能就没有参考意义了。 绑定事件如何主动传当前元素1@click="onClick($event, others)" vue.config如何配置不同打包后的文件输出路径在使用vue的cli 3.x后，webpack的打包配置都通过项目根目录的vue.config.js进行配置，而默认这个文件是不存在的，需要自己创建和书写配置。 假如现在有个需求，我想在不同的打包命令下，打包后的文件输出在不同的本地文件夹：在package.json文件配置了两个命令（1）当我执行npm run build时，进行文件打包，打包后的文件输出在当前项目目录的dist文件夹（vue cli默认的配置就是如此）（2）当我执行npm run publish时，进行文件打包，打包后的文件输出在某个指定的本地目录的某个文件夹 方法： 通过修改打包命令进行传参数，让vue.config.js文件获取到参数来区分不同的打包操作，从而修改打包后的输出文件路径 package.json文件配置： 1234"scripts": { "build": "vue-cli-service build", "publish": "npm_config_publish=true npm run build'" }, vue.config.js文件配置： 12345module.exports = { baseUrl: '', // 打包输出文件目录 outputDir: process.env.npm_config_publish ? '/Users/xxx/Documents/host/test/projectname' : 'dist' ,} 以上的打包配置，在npm run publish时，打包后的文件就会存在你本地的'/Users/xxx/Documents/host/test/projectname里。 Element-ui的table事件如何传自定义参数例子代码片段（row-click为表格当某一行被点击时会触发该事件）： 12345 而该事件默认有三个参数：row, column, event，参数的意义可以看element-ui官方文档 问题：如果我的table是个数组循环渲染，需要传个当前table下标index第一反应的方案是： 1234567 这种写法虽然能够获取到index的值，但是，row column event这三个变量的值就变成undefined 因为如果在绑定的时，给onRowClick传入的三个参数，是当前上下文的三个新变量，而当前上下文并没有声明有这三个变量，所以是undefined，而传入的undefined就覆盖了row-click事件的三个默认参数。 我们可以改造一下写法： 1234567 这样，在onRowClick就可以正常获取到四个参数的值。]]></content>
+      <categories>
+        <category>bugs</category>
+      </categories>
+      <tags>
+        <tag>vue, bug</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[前端开发踩过的坑]]></title>
+    <url>%2F2018%2F02%2F05%2Ffrontend-bugs%2F</url>
+    <content type="text"><![CDATA[本文用于总结在前端开发中遇到的一些比较杂的坑。比如CORS跨域等等。 CORS跨域方案接到一个前端跨域请求（GET和POST）相关的需求一调试，咦！浏览器提示跨域报错了～简单！让服务端童鞋加上跨域请求头，开启CORS： 1234Access-Control-Allow-Credentials: trueAccess-Control-Allow-Headers: x-requested-with,content-type,x-xsrf-tokenAccess-Control-Allow-Methods: GET,POST,OPTIONSAccess-Control-Allow-Origin: http://w3cmark.com ⚠️这里有个彩蛋，服务端加跨域请求头要小心，冒号前面如果有空格，会出现浏览器兼容问题，比如火狐浏览器看到的请求没有跨域请求头；再比如在chrome下，可以正常看到有跨域请求头，但如果使用whistle做代理，跨域请求头就丢失了。 以下是错误示范（冒号前面多了个空格）： 1234Access-Control-Allow-Credentials : trueAccess-Control-Allow-Headers : x-requested-with,content-type,x-xsrf-tokenAccess-Control-Allow-Methods : GET,POST,OPTIONSAccess-Control-Allow-Origin : http://w3cmark.com 服务端设置搞定！前端再次请求，请求响应头带上上面的返回，GET请求顺利过关。。。如果接口需要登录，前端设置请求withCredentials: true，请求就带上cookie，顺利过关。。。再来一个POST请求咦！浏览器多发了一个OPTIONS请求，一查，原来是preflight request，预校验请求 这里的请求被分成两种：简单请求和复杂请求，只有复杂请求才会发OPTIONS请求，详情介绍移步：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS ———-说了那么多坑终于来了————— 因为服务端对请求做登录校验（包括OPTIONS请求），校验通过后，才会给请求加跨域头返回，而OPTIONS请求是无法携带cookie的来自SO的截图：所以服务端无法接收到cookie，一直认为未登录，导致发OPTIONS请求时浏览器直接报跨域了。 解决方案，服务端不需要对OPTIONS请求做cookie校验的操作]]></content>
+      <categories>
+        <category>bugs</category>
+      </categories>
+      <tags>
+        <tag>cors, bug</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[陌生的HTML标签]]></title>
+    <url>%2F2018%2F01%2F25%2Funfamiliar-html-tags%2F</url>
+    <content type="text"><![CDATA[从刚入门前端时，从table年代到div年代，很多实际的HTML开发基本都停留在几个常用的标签，比如html、head、body、div、meta、a、p、span、i、em、img、canvas、video、audio、h1、h2…而有很多相对于我来说，是很少用甚至没用过的标签。 SVG预定义的形状元素标签 这些标签不熟，说明svg不熟 矩形 圆形 椭圆 线 折线 多边形 路径 、：用作文档中插图的图像：figure插图里如果带有一个标题可以使用]]></content>
+      <categories>
+        <category>HTML</category>
+      </categories>
+      <tags>
+        <tag>html, tags</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Python入门积累]]></title>
+    <url>%2F2018%2F01%2F20%2Fpython-getting-started%2F</url>
+    <content type="text"><![CDATA[最近在学习Python，本文用来记录学习过程中觉得值得记录的知识点，以备复习。 用处 web网站和各种网络服务 系统工具和脚本 作为“胶水”语言把其他语言开发的模块包装起来方便使用 优缺点 解析型语言，执行速度比 c（编译成机器码）/java（编译成字节码） 都慢 源码不能加密 代码量少，开发速度快 注意事项 版本兼容问题，2.7和3.3代码存在不兼容的情况 如果中文字符串在Python环境下遇到 UnicodeDecodeError，这是因为.py文件保存的格式有问题。可以在第一行添加注释 1# -*- coding: utf-8 -*-]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[常用工具集备忘]]></title>
+    <url>%2F2018%2F01%2F15%2Fcommon-toolset-memo%2F</url>
+    <content type="text"><![CDATA[前端开发过程中用到的各种各样的工具，经常会出现千奇百怪的问题，记录下来，下次再出现时可以快速定位解决。 nrm——NPM源管理nrm官方>> 12# 安装npm install -g nrm 12345678910111213141516Usage: nrm [options] [command] Commands: ls List all the registries use Change registry to registry add [home] Add one custom registry del Delete one custom registry home [browser] Open the homepage of registry with optional browser test [registry] Show the response time for one or all registries help Print this help Options: -h, --help output usage information -V, --version output the version number npm 报错（npm ERR! cb() never called!）出现环境：OS X/macOS官方issue：https://github.com/npm/npm/issues/17839 这个报错无论是在官方的issue还是Stack Overflow，都有人反馈，解决思路主要有两种：（1）来自Stack Overflow的解决方案：npm cache verify 和 npm cache clean（网上搜索还有就是安装node的助手，但是我实践是不行的，因为在安装 npm install -g n 本身也会报这个错）（2）来自官方的issue评论的解决方案：删除node相关的安装，然后重装node（但看起来操作比较复杂，又要删这，又要删哪的） 我的最终解决方案：去官方下载对应的安装包（尝试过brew install node安装，但是报错：Error: Checksum mismatch，而且我一开始不是通过brew安装的，所以放弃折腾了），我直接选的是当前长期支持版的最新版，直接安装覆盖即可。 GitHub Pages怎么绑定自己的域名第一步：申请一个属于自己的域名 第二步：在域名提供商，进入域名解析设置，以我的http://w3cmark.github.io为例（1）先添加一个CNAME，主机记录写@，后面记录值写上你的w3cmark.github.io（2）再添加一个CNAME，主机记录写www，后面记录值也是w3cmark.github.io这样别人用www和不用www都能访问你的网站（其实www的方式，会先解析成http://w3cmark.github.io，然后根据CNAME再变成http://wwww.3cmark.com，即中间是经过一次转换的）。 第三步：在GitHub Pages项目的Setting–>GitHub Pages–>Custom domain（自定义域名）去直接填写你自己的域名，如www.w3cmark.com，前面不需要http://，然后点击旁边的save按钮保存即可。（也可以不需要带www，如w3cmark.com。两者的区别是，如果带www，访问时不管是否带有www，浏览器地址栏访问的都是www.w3cmark.com，反之亦然。） 上面介绍的是CNAME别名记录，也可以使用A记录，后面的记录值是写GitHub Pages里面的ip地址，但有时候IP地址会更改，导致最后解析不正确，所以还是推荐用CNAME别名记录要好些，不建议用IP。 上面三步做完，一般等几分钟，解析生效，就可以用你自己域名访问下试试啦～ GitHub Pages绑定自己的域名后，怎么支持https 2018.05.01官方支持https Custom domains on GitHub Pages gain support for HTTPS 如果你是采用CNAME别名记录的方式，开启https很简单，只需要在在GitHub Pages项目的Setting去勾选即可（如果你是用ip做解析的，需要更新一下ip，具体可以看GitHub官方博客） Whistle使用123# 同一个域名根据不同的path指向不同的ip /api.w3cmark.com\/(?!column)(.*)/ http://127.0.0.1:9529/$1^api.w3cmark.com/column/*** host://10.199.133.253/column/$1 MAC 命令相关1234567891011# 修改hostssudo vi /etc/hosts# 打开当前路径的finderopen .# 全局命令存放路径/usr/local/bin# 全局命令代码存放路径/usr/local/lib]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+  </entry>
+  <entry>
+    <title><![CDATA[Webp图片降级方案有哪些]]></title>
+    <url>%2F2018%2F01%2F02%2Fwebp-image-degradation-plan%2F</url>
+    <content type="text"><![CDATA[Webp已经开始慢慢流行，有些产品还要考虑到一些低版本浏览器的情况，所以做兼容还是少不了，本文来探讨一下，Webp图片降级方案有哪些。 前言无论哪种方案，前提你都需要有两套格式的图片。可以通过各种工具进行批量转换。 方案一前端处理 12345 对于每个浏览器都可以用，而不只是支持元素的浏览器。这是因为不支持的浏览器只会显示img指定的图片。 方案二前端处理 这种方案的原理就是通过先检测当前浏览器是否支持webp格式来决定图片和图片背景采用哪种图片格式来展示。 第一步，需要知道浏览器是否支持webp格式 1document.createElement('canvas').toDataURL('image/webp'); 如果浏览器支持webp格式，返回的结果带有data:image/webp;： 1data:image/webp;base64,UklGRrgAAABXRUJQVlA4WAoAAAAQAAAAKwEAlQAAQUxQSBIAAAABBxARERCQJP7/H0X0P+1/QwBWUDgggAAAAHANAJ0BKiwBlgA+bTaZSaQjIqEgKACADYlpbuF2sRtACewD32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99snIe+2TkPfbJyHvtk5D32ych77ZOQ99qwAAP7/1gAAAAAAAAAA 如果浏览器不支持webp格式，返回的结果不带有data:image/webp;： 1data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACWCAYAAABkW7XSAAAAAXNSR0IArs4c6QAAAylJREFUeAHt0DEBAAAAwqD1T20IX4hAYcCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYMCAAQMGDBgwYOAdGL/UAAEPpnR6AAAAAElFTkSuQmCC 或者可以一开始，通过触发一张只有1像素的webp图片，监听它的onload事件，如果成功，说明浏览器支持webp格式，如果不支持，说明浏览器不支持啦。不过这种首先你得准备这张图片，其次，你要每次都去请求这张图片。 第二步，根据不同浏览器支持情况展示不同格式 在第一步，外面通过js知道浏览器支持情况，然后把两种格式的图片都放到img标签的自定义属性，根据不同情况取不同的图片地址显示出来即可。 1 至于样式，可以直接根据检测的结果在body标签加入一个特殊样式，然后把webp的背景图写在这个样式下即可。 方案三服务端处理 前端统一请求图片地址，比如https://xxx.w3cmark.com/f7b07c8.jpg，服务端接受到客户端请求时，根据request头的accept字段来判断，返回哪种格式的图片。 客户端支持webp格式时，request头的accept字段会有image/webp，如下图： 不支持时： 官方对accept字段的解释： The Accept request-header field can be used to specify certain media types which are acceptable for the response. Accept headers can be used to indicate that the request is specifically limited to a small set of desired types, as in the case of a request for an in-line image.google翻译一下： Accept request-header字段可用于指定响应可接受的某些媒体类型。 接受标头可用于指示请求特别限于一小组所需类型，如在请求内嵌图像的情况下。 这种方案前端不用做特殊处理，但是服务端返回处理写死后，就不太灵活了，如果有某些场景就是想要访问非webp呢？需要具体方案看业务的具体场景来用哈。]]></content>
+      <categories>
+        <category>其它</category>
+      </categories>
+      <tags>
+        <tag>laraval</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[前端开源项目目录结构]]></title>
+    <url>%2F2017%2F12%2F29%2Ffront-end-open-source-project-directory-structure%2F</url>
+    <content type="text"><![CDATA[得益于各种自动化工具，如今前端开源项目的目录结构越来越复杂了，在看别人代码时可能一脸懵逼，在这里整理了常见的目录结构。 文字版如下：.circleci 存放CircleCI持续集成相关，目前只支持github和Bitbucket代码管理工具 build webpack的相关配置，包括基本配置、开发环境配置、生产环境配置等 config 针对开发环境，生产环境，测试环境的配置信息 dist 存放编译打包后的文件 examples 存放例子 flow flow（JavaScript静态类型检查器，貌似Eslint）的 libdef 相关，用来存放引入一些第三方库或是自定义类型库 mock 存放项目用于模拟的数据 node_modules 安装依赖时自动生成的，用于存放项目依赖包 src 项目源码 static 静态资源，此目录下的文件不会被webpack处理。在webpack打包后，此目录下的文件会默认被直接复制到dist/static/中 test 用于存放测试文件，比如unit单元测试、e2e测试等 .babelrc babel配置文件 .editorconfig 编辑器编码规范配置文件，用于告诉编辑器本项目的一些编码规范，比如用多少个空格 .eslintignore ESLint语法检查忽略配置文件，用于配置忽略语法检查的目录文件 .eslintrc ESLint规则配置文件，用于语法检查 .flowconfig flow（一个 js 静态类型检测器）项目的配置文件 .gitignore 用于告诉Git系统要忽略掉跟踪哪些文件 .gitkeep 用于跟踪项目中的空文件（默认情况Git 不跟踪空文件夹） .gitattributes 以行为单位设置一个路径下所有文件的属性 .postcssrc.js (postcss.config.js) postcss配置文件 .travis.yml Travis CI（持续集成服务）的配置文件，指定了 Travis 的行为，Github 仓库里面，一旦代码仓库有新的 Commit，Travis 就会去找这个文件，执行里面的命令 index.html 首页静态html，可能是主入口 LICENSE 开源协议 Makefile Make（主要用于C语言的项目构建工具，也有些前端开源项目会支持）构建规则 package-lock.json 使用npm安装依赖时自动生成的确切依赖配置文件，用于后续安装或跨机器安装能够生成相同版本的依赖，即使安装的依赖有更新也不影响 package.json npm 模块配置文件，用于定义了这个项目所需要的各种模块，以及项目的配置信息（比如名称、版本、许可证等元数据） yarn.lock 使用用Yarn CLI 增加／升级／删除依赖时自动生成的确切依赖配置文件，准确存储每个安装的依赖是哪个版本，用于后续安装或跨机器安装能够生成相同版本的依赖 README.md 项目自述说明，用于概述本项目相关信息：是什么、做什么、有什么用、怎么用等 思维导图版如下：]]></content>
+      <categories>
+        <category>其它</category>
+      </categories>
+      <tags>
+        <tag>laraval</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Laraval-nova入门安装]]></title>
+    <url>%2F2017%2F12%2F26%2Flaraval-nova%2F</url>
+    <content type="text"><![CDATA[最近在接触基于PHP框架laraval的一个nova项目，它 官方文档 在介绍安装有些步骤不是很详细，所以记录一下整个安装流程： 1、需要确保安装mysql、php、composer环境 2、安装laraval框架，通过larval框架创建新project项目 1234567891011# 安装laravalcomposer global require "laravel/installer" # 创建名字为blog项目laravel new blog # 如果提示laraval命令没找到，需要设置环境变量，比如mac下：vim ~/.zshrc# 添加以下pathexport PATH="$HOME/.composer/vendor/bin:$PATH" 3、进入创建好的新project项目，修改composer.json文件 12345678910111213// 新加repositories字段"repositories": [ { "type": "path", "url": "./nova" // 下载源码解压后存放的相对路径 }], // 修改require字段"require": { … "laravel/nova": "*" // 新加}, 4、修改composer.json文件后，按顺序执行： 执行 composer update 执行 php artisan nova:install 5、本地数据库创建 修改.env文件里面数据库相关信息，比如数据库名、用户名、密码 执行 php artisan migrate （本人测试发现在mysql8.xx版本会出现连接报错，暂时没能解决，连接5.xx的mysql没问题） 但是又遇到Unknown character set: 'utf8mb4'报错，解决方案是修改项目里的 /config/database.php 6、创建用户（用于访问时的登录） php artisan nova:user 7、启动服务 php artisan serve 访问路径 http://127.0.0.1:8000/nova/ 即可看到后台界面啦]]></content>
+      <categories>
+        <category>其它</category>
+      </categories>
+      <tags>
+        <tag>laraval</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[小程序开发遇到的坑]]></title>
+    <url>%2F2017%2F12%2F24%2Fsmall-program-bugs%2F</url>
+    <content type="text"><![CDATA[做了一小段时间的微信小程序开发，踩了不少坑，在这里做一下总结： 1、在 app.js 的 onShow 和 onHide 时 getCurrentPages() 查询页面栈，可能获取到空数组发现时间：20180517 系统环境：IOS 如果有在这两个场景使用，建议对当前页面对象进行判断是否为undefined 2、tabBar页面 wx.getSystemInfo 的 windowHeight 小于实际高度（大约少了一个tabBar的距离）发现时间：20180517 系统环境：android部分机 3、tabBar页面Page的onTabItemTap事件在首次切换不会触发，要在页面onShow后再切换才触发发现时间：20180517 系统环境：iOS sdk 1.9.97有问题、更新到2.0.7正常 4、button的border无法去掉？小程序的open-type是button特有的属性，所以使用小程序原生button组件在所难免，比如： 123 点击分享 但是原生的button可能不太适合业务，所以需要去掉默认样式，比如去掉背景色和边框： 1234.btn { background-color: transparent; border: 0;} 咦！意不意外？背景是去掉了，边框还在。。。原来原生button的边框是写在 伪元素 after的，所以，需要这样才能去掉： 123.btn::after { border: 0;} 5、canvas.draw回调一直不执行，也没报错（sdk在1.7.1以上都不可以） 前往社区类似问题反馈 如果你用了很多方式也排查不出原因，可以试下把绘画的canvas标签放到page页面级别的html，而不是放到自定义的组件html。貌似放到自定义组件，无法找到画布，导致绘画不成功（它没报错，但回调又不执行）。 回头看来官方api，原来createCanvasContext方法有第二个参数 Object this， 在自定义组件下，当前组件实例的this，表示在这个自定义组件下查找拥有 canvas-id 的 ，如果省略则不在任何自定义组件内查找]]></content>
+      <categories>
+        <category>小程序</category>
+      </categories>
+      <tags>
+        <tag>bugs</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[让loading效果更线性]]></title>
     <url>%2F2017%2F12%2F20%2Floading-effect-more-linear%2F</url>
     <content type="text"><![CDATA[为了提高用户体验，在做一些比较多资源的项目，我们经常会用资源预加载的方式，一打开页面会先看到一个loading动画效果或者loading进度条，再或者加载百分比，用来暗示用户，页面资源比较多，正在加载中啦，你再等等哈，不要走喔。。。 而这里的资源预加载，就是通过js去预先请求某些资源，以备页面展示时可以直接使用，比如图片预加载，我们可能会这样实现： 12345678var img = new Image();img.onload = function () &#123;// 加载成功...&#125;;img.onerror = function () &#123;// 加载出错...&#125;;img.src = 'https://dummyimage.com/90x90/ddd/79c'; 通过创建一个不可见的img来触发图片请求，上面演示的只是加载一张，一般情况做预加载都会有多资源才做啦，所以批量预加载只需要加入循环： 1234567891011121314151617181920212223242526var iFileData = [//预加载图片资源 'https://dummyimage.com/90x90/ddd/79c', 'https://dummyimage.com/100x100/ddd/79c', 'https://dummyimage.com/200x200/ddd/79c', 'https://dummyimage.com/300x300/ddd/79c', 'https://dummyimage.com/400x400/ddd/79c', 'https://dummyimage.com/500x500/ddd/79c' ], _total = iFileData.length, _loaded = 0;for(var i = 0; i &lt; _total; i++) &#123; loadImage(iFileData);&#125;loadImage = function(iData)&#123; var img = new Image(); img.onload = img.onerror = function () &#123; _loaded++; checkLoadComplete(); &#125;; img.src = iData;&#125;,checkLoadComplete = function()&#123; if(_loaded == _total) &#123; console.log('加载完毕'); &#125;&#125;; 上面可以实现简单的预加载了，但好像没有当前加载的进度喔下面加上一个当前加载进度的百分比： 12345678910checkLoadComplete = function()&#123; var per = (_loaded/_total).toFixed(2); if(per &gt; 1) &#123; per = 1; &#125; console.log('当前加载进度：' + per); if(_loaded == _total) &#123; console.log('加载完毕'); &#125;&#125; 到这，资源预加载的功能基本就ok了，然后展示进度跟进上面的进度返回，转成数字百分比或者一个进度条就可以了。另外，这个功能很常用，可以再做一下封装，方便使用，还可以加入其它资源的支持，比如多媒体文件？ 完了？但，这个不是本文的重点，本文的重点是线性。 改良，让加载更线性上面的预加载有个问题，体验不好。比如，你要预加载10个资源，显示的百分比就是0%，10%，20%，30%…这样10个数字的跳动，极端点，当你只有一个资源（当然这里是极端考虑，像前文说的，一个资源，你估计不会用预加载了）时，进度就是0%~100%，一下就从0跳到100了。 还有，即使是10个资源，当用户第二次打开页面，因为资源有缓存，这个loading效果就会可能一闪而过，因为有缓存加载太快了，进度都看不清就没了，体验也不好（或者即使第一次，如果用户网速很好，也会出现一闪而过）。 所以，上面的预加载体验不够好，不稳定，导致动画效果不线性。 预想的线性是怎样的呢？比如进度百分比数字，我预想的是无论多少资源，第几次打开，网速如何，都是从0%，1%，2%，3%，4%，5%，6%….这样直到100的，只有这样，数字展示才不会大幅度跳动或者进度条的宽度才不会跳跃。 那怎么达到这样的数字累加效果呢？咦？累加？那可以用定时器啊： 123456789var _num = 0;var _num_interval = setInterval(function()&#123; _num++; if(_num &gt; 99)&#123; clearInterval(_num_interval); _num = 100; &#125; console.log(_num);&#125;, 50) 嗯，这样数字就不跳动啦，很线性！！从0100，每隔50毫秒加1，到100就停止，so easy 线性数字有了，但和我加载进度有毛关系？而且资源加载是会根据网速不同而不同，这50毫秒。。。假的进度，明显不行啊 第一个问题，线性数字和实际资源加载联系起来，这个还是很容易的。从第一个资源开始，就同时触发触发上面的计时器，当最后一个资源加载完而且计算到100了，就完成了预加载过程。 第二个问题，定时器的时间怎么和实际资源加载联系起来呢？定时器先根据资源数定一个初始值，加载过程通过把假的计算进度和真实的加载进度进行比较，实时调整定时器的时间，以达到尽可能的模拟实际进度： 1234567891011121314151617181920212223242526272829303132333435363738var _time = 50;var linearLoad = function()&#123; if(_num_interval)&#123; clearInterval(_num_interval); &#125; _num_interval = setInterval(function()&#123; _num++; if(_num &gt; 99 &amp;&amp; (_loaded == _total))&#123; clearInterval(_num_interval); _num = 100; console.log(_num); // 加载完毕 console.log('加载完毕'); return; &#125;else if(_num &gt; 99)&#123; clearInterval(_num_interval); return; &#125; console.log(_num); if(_time &gt; 1)&#123; adjustSpeed(_time_range); &#125; &#125;, _time)&#125;,adjustSpeed = function(range)&#123; //调节数字变化速度 var per = (_loaded/_total).toFixed(2); if(parseInt(per*100) &gt; _num)&#123; //如果实际加载速度快，提高线性数字速度 _time = _time - range; _time = _time &lt; 1 ? 1 : _time; linearLoad(); &#125;else&#123; //如果实际加载慢，降低线性数字速度 _time = _time + range; linearLoad(); &#125;&#125; 逻辑细节请移步测试demo：http://www.w3cmark.com/staticdemo/loading/ 效果预览]]></content>
