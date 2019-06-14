@@ -2,16 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://w3cmark.com/categories/index.html</loc>
+    
+    <lastmod>2019-06-14T10:27:15.424Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w3cmark.com/tags/index.html</loc>
+    
+    <lastmod>2019-06-14T10:21:42.856Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://w3cmark.com/about/index.html</loc>
+    
+    <lastmod>2019-06-14T10:20:16.165Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://w3cmark.com/2017/12/20/loading-effect-more-linear/</loc>
     
-    <lastmod>2019-06-14T01:52:04.691Z</lastmod>
+    <lastmod>2019-06-14T10:17:05.810Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://w3cmark.com/2017/11/12/chrome-extension-solves-gitlab-online-edit-bug/</loc>
     
-    <lastmod>2019-06-13T12:29:12.950Z</lastmod>
+    <lastmod>2019-06-14T10:16:32.194Z</lastmod>
     
   </url>
   
