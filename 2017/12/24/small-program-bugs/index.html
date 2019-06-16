@@ -469,7 +469,7 @@
       
 
       
-        <html><head><meta name="generator" content="Hexo 3.8.0"></head><body><p>做了一小段时间的微信小程序开发，踩了不少坑，在这里做一下总结：</p>
+        <p>做了一小段时间的微信小程序开发，踩了不少坑，在这里做一下总结：</p>
 <a id="more"></a>
 
 <h4 id="1、在-app-js-的-onShow-和-onHide-时-getCurrentPages-查询页面栈，可能获取到空数组"><a href="#1、在-app-js-的-onShow-和-onHide-时-getCurrentPages-查询页面栈，可能获取到空数组" class="headerlink" title="1、在 app.js 的  onShow 和 onHide 时 getCurrentPages() 查询页面栈，可能获取到空数组"></a>1、在 <code>app.js</code> 的  <code>onShow</code> 和 <code>onHide</code> 时 <code>getCurrentPages()</code> 查询页面栈，可能获取到空数组</h4><p>发现时间：20180517</p>
@@ -485,13 +485,13 @@
 <p>sdk 1.9.97有问题、更新到2.0.7正常</p>
 </blockquote>
 <h4 id="4、button的border无法去掉？"><a href="#4、button的border无法去掉？" class="headerlink" title="4、button的border无法去掉？"></a>4、button的border无法去掉？</h4><p>小程序的<code>open-type</code>是<code>button</code>特有的属性，所以使用小程序原生<code>button</code>组件在所难免，比如：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><button open-type="share" class="btn"></button></span><br><span class="line">    点击分享</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;button open-type=&quot;share&quot; class=&quot;btn&quot;&gt;</span><br><span class="line">    点击分享</span><br><span class="line">&lt;/button&gt;</span><br></pre></td></tr></table></figure>
 
 <p>但是原生的<code>button</code>可能不太适合业务，所以需要去掉默认样式，比如去掉背景色和边框：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.btn {</span><br><span class="line">    background-color: transparent;</span><br><span class="line">    border: 0;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.btn &#123;</span><br><span class="line">    background-color: transparent;</span><br><span class="line">    border: 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>咦！意不意外？背景是去掉了，边框还在。。。<br>原来原生<code>button</code>的边框是写在 <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/::after" target="_blank" rel="noopener">伪元素</a> <code>after</code>的，所以，需要这样才能去掉：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.btn::after {</span><br><span class="line">    border: 0;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.btn::after &#123;</span><br><span class="line">    border: 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h4 id="5、canvas-draw回调一直不执行，也没报错（sdk在1-7-1以上都不可以）"><a href="#5、canvas-draw回调一直不执行，也没报错（sdk在1-7-1以上都不可以）" class="headerlink" title="5、canvas.draw回调一直不执行，也没报错（sdk在1.7.1以上都不可以）"></a>5、<code>canvas.draw</code>回调一直不执行，也没报错（sdk在1.7.1以上都不可以）</h4><blockquote>
 <p><a href="https://developers.weixin.qq.com/community/develop/doc/000a2452278da84dbc76b2bcf5b400" target="_blank" rel="noopener">前往社区类似问题反馈</a></p>
@@ -500,7 +500,7 @@
 <p>回头看来<a href="https://developers.weixin.qq.com/miniprogram/dev/api/canvas/wx.createCanvasContext.html" target="_blank" rel="noopener">官方api</a>，原来<code>createCanvasContext</code>方法有第二个参数 <code>Object this</code>，</p>
 <blockquote>
 <p>在自定义组件下，当前组件实例的this，表示在这个自定义组件下查找拥有 canvas-id 的 <canvas> ，如果省略则不在任何自定义组件内查找</canvas></p>
-</blockquote></body></html>
+</blockquote>
       
     </div>
 
