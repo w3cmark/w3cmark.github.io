@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://w3cmark.com/2018/07/19/5G-impact-on-the-front-end/</loc>
+    <lastmod>2019-07-19</lastmod>
+  </url>  <url>
+    <loc>http://w3cmark.com/2018/01/02/webp-image-degradation-plan/</loc>
+    <lastmod>2019-07-19</lastmod>
+  </url>  <url>
     <loc>http://w3cmark.com/2018/06/29/translate-animating-svg-with-css/</loc>
     <lastmod>2019-07-03</lastmod>
   </url>  <url>
@@ -8,9 +14,6 @@
     <lastmod>2019-06-30</lastmod>
   </url>  <url>
     <loc>http://w3cmark.com/2018/02/15/vue-bugs/</loc>
-    <lastmod>2019-06-30</lastmod>
-  </url>  <url>
-    <loc>http://w3cmark.com/2018/01/02/webp-image-degradation-plan/</loc>
     <lastmod>2019-06-30</lastmod>
   </url>  <url>
     <loc>http://w3cmark.com/2017/12/29/front-end-open-source-project-directory-structure/</loc>
