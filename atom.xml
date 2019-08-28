@@ -35,13 +35,13 @@
       <category term="AMS" scheme="http://w3cmark.com/categories/AMS/"/>
     
     
-      <category term="前端" scheme="http://w3cmark.com/tags/%E5%89%8D%E7%AB%AF/"/>
-    
       <category term="AMS" scheme="http://w3cmark.com/tags/AMS/"/>
     
       <category term="Vue" scheme="http://w3cmark.com/tags/Vue/"/>
     
       <category term="Element-UI" scheme="http://w3cmark.com/tags/Element-UI/"/>
+    
+      <category term="前端" scheme="http://w3cmark.com/tags/%E5%89%8D%E7%AB%AF/"/>
     
   </entry>
   
@@ -64,9 +64,9 @@
       <category term="其它" scheme="http://w3cmark.com/categories/%E5%85%B6%E5%AE%83/"/>
     
     
-      <category term="5G" scheme="http://w3cmark.com/tags/5G/"/>
-    
       <category term="前端" scheme="http://w3cmark.com/tags/%E5%89%8D%E7%AB%AF/"/>
+    
+      <category term="5G" scheme="http://w3cmark.com/tags/5G/"/>
     
   </entry>
   
