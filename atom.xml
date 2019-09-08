@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://w3cmark.com/"/>
-  <updated>2019-08-28T01:51:53.074Z</updated>
+  <updated>2019-09-08T13:58:19.303Z</updated>
   <id>http://w3cmark.com/</id>
   
   <author>
@@ -15,6 +15,43 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Webpack项目使用alias报错export &#39;default&#39; (imported as &#39;xxx&#39;) was not found in &#39;xxxx&#39;</title>
+    <link href="http://w3cmark.com/2019/09/08/export-default-imported-as-xxx-was-not-found/"/>
+    <id>http://w3cmark.com/2019/09/08/export-default-imported-as-xxx-was-not-found/</id>
+    <published>2019-09-08T11:25:26.000Z</published>
+    <updated>2019-09-08T13:58:19.303Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近遇到一个Webpack项目报错很头疼：通常我们开发npm包的时候，都会需要经过本地项目测试的，为了调试方便，会通过<code>npm link</code>或者<code>alias</code>来引入本地开发好的包。</p><p>比如vue-cli 3.0项目，在<code>vue.config.js</code>配置alias引入<code>@ams-team/ams</code>这个包：</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    configureWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">        config.resolve = &#123;</span><br><span class="line">            extensions: [<span class="string">'.js'</span>, <span class="string">'.vue'</span>, <span class="string">'.json'</span>],</span><br><span class="line">            alias: &#123;</span><br><span class="line">                <span class="string">'@ams-team/ams'</span>: resolve(<span class="string">'../../packages/ams'</span>) <span class="comment">// 一般包的package.json会通过 main: "lib/ams.js"来知道引入文件的</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><p>这时候你在项目引入 <code>import ams from &#39;@ams-team/ams&#39;</code> 会得到下面报错：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export &apos;default&apos; (imported as &apos;ams&apos;) was not found in &apos;@ams-team/ams&apos;</span><br></pre></td></tr></table></figure><p>但是如果我从 npm 上下载自己的包是不报错的。</p><a id="more"></a><h2 id="报错的根本原因"><a href="#报错的根本原因" class="headerlink" title="报错的根本原因"></a>报错的根本原因</h2><p>通过谷歌了一番，发现报错的根本原因是：<code>import</code> 和 <code>module.exports</code> 语法混用。</p><p>项目引入肯定是使用 <code>import</code> 语法的，如果出现混用，那就是打包的文件是使用 <code>module.exports</code> ？然后赶紧搜索了一下 <code>@ams-team/ams</code> 下的 <code>lib</code> 文件，发现果然有<code>module.exports</code>。。。<br>难道是 Webpack 没有转成 ES6 的问题？</p><p>经过查阅Webpack官方文档，发现Webpack会将项目打包成 <code>ES5</code> 的版本，而在新项目里用 <code>import</code> 里引入了带有 <code>module.exports</code> 语句的文件时就会导致上面的报错。</p><p>那如何解析 <code>npm</code> 下载后可以正常使用呢？</p><p><strong>猜测：</strong></p><p>我们在写 <code>webpack.config.js</code> 会发现有一项 <code>Exclude</code>，说是可以不对某些文件进行编译从而提高编译性能。难道Webpack对从 <code>npm</code> 下载下来的文件进行预先编译，将其转成 ES6，而本地引入的话没有预先编译。</p><p>为了验证我的猜测，做了以下测试：</p><ol><li>将 <code>ams/lib</code> 下所有文件拷到新项目的 <code>/src</code> 里，直接本地引入，同样报错。</li><li>将 <code>ams/lib</code> 下所有文件拷贝到新项目的 <code>/node_modules/ams</code> 里，直接本地使用 <code>import &#39;/node_modules/ams/ams.js&#39;</code> 引入，成功！</li></ol><p>通过测试，验证了 <strong>Webpack 会对 <code>/node_modules</code> 下的文件进行预先编译，再引入到真实项目中，这样就没有 <code>module.exports</code> 的语句了</strong> 这个猜测是对的</p><h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>我真的需要做本地调试，那怎么办呢？我总不能每次都拷贝进引入项目的<code>/node_modules/</code>吧？</p><p>其实不用，我们还是可以配置alias来实现引入包的源码：</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    configureWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">        config.resolve = &#123;</span><br><span class="line">            extensions: [<span class="string">'.js'</span>, <span class="string">'.vue'</span>, <span class="string">'.json'</span>],</span><br><span class="line">            alias: &#123;</span><br><span class="line">                <span class="string">'@ams-team/ams'</span>: resolve(<span class="string">'../../packages/ams/src'</span>) <span class="comment">// 直接引用src源码</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><p>但是这样可能会带来另外一个问题：因为引入源码，那就是每次都要把这个包进行编译，所以可能会涉及到编译速度和编译依赖问题，那就另外讨论了。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;最近遇到一个Webpack项目报错很头疼：通常我们开发npm包的时候，都会需要经过本地项目测试的，为了调试方便，会通过&lt;code&gt;npm link&lt;/code&gt;或者&lt;code&gt;alias&lt;/code&gt;来引入本地开发好的包。&lt;/p&gt;
+&lt;p&gt;比如vue-cli 3.0项目，在&lt;code&gt;vue.config.js&lt;/code&gt;配置alias引入&lt;code&gt;@ams-team/ams&lt;/code&gt;这个包：&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;module&lt;/span&gt;.exports = &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    configureWebpack: &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;params&quot;&gt;config&lt;/span&gt; =&amp;gt;&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        config.resolve = &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            extensions: [&lt;span class=&quot;string&quot;&gt;&#39;.js&#39;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&#39;.vue&#39;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&#39;.json&#39;&lt;/span&gt;],&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            alias: &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                &lt;span class=&quot;string&quot;&gt;&#39;@ams-team/ams&#39;&lt;/span&gt;: resolve(&lt;span class=&quot;string&quot;&gt;&#39;../../packages/ams&#39;&lt;/span&gt;) &lt;span class=&quot;comment&quot;&gt;// 一般包的package.json会通过 main: &quot;lib/ams.js&quot;来知道引入文件的&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;这时候你在项目引入 &lt;code&gt;import ams from &amp;#39;@ams-team/ams&amp;#39;&lt;/code&gt; 会得到下面报错：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;export &amp;apos;default&amp;apos; (imported as &amp;apos;ams&amp;apos;) was not found in &amp;apos;@ams-team/ams&amp;apos;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;但是如果我从 npm 上下载自己的包是不报错的。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Webpack" scheme="http://w3cmark.com/categories/Webpack/"/>
+    
+    
+      <category term="前端" scheme="http://w3cmark.com/tags/%E5%89%8D%E7%AB%AF/"/>
+    
+      <category term="Webpack" scheme="http://w3cmark.com/tags/Webpack/"/>
+    
+      <category term="alias" scheme="http://w3cmark.com/tags/alias/"/>
+    
+      <category term="export" scheme="http://w3cmark.com/tags/export/"/>
+    
+      <category term="import" scheme="http://w3cmark.com/tags/import/"/>
+    
+  </entry>
   
   <entry>
     <title>AMS：基于类json配置的管理后台前端解决方案</title>
